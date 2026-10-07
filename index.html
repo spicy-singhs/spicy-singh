@@ -34,11 +34,6 @@
 </head>
 <body class="text-gray-800 min-h-screen pb-28">
 
-  <!-- Corner Mandala Accent Top-Left -->
-  <div class="fixed top-0 left-0 w-32 h-32 opacity-10 pointer-events-none z-0">
-    <svg viewBox="0 0 100 100" fill="#78350f"><path d="M50 0 A50 50 0 0 1 100 50 A50 50 0 0 1 50 100 A50 50 0 0 1 0 50 A50 50 0 0 1 50 0 Z M50 10 A40 40 0 0 0 10 50 A40 40 0 0 0 50 90 A40 40 0 0 0 90 50 A40 40 0 0 0 50 10 Z"/></svg>
-  </div>
-
   <!-- Header Section -->
   <header class="bg-gradient-to-r from-red-800 via-amber-700 to-red-800 text-white shadow-xl sticky top-0 z-40 relative">
     <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -94,20 +89,17 @@
     <!-- Menu Item Cards Container -->
     <div id="menuList" class="space-y-4"></div>
 
-    <!-- Interactive QR Code Generator Tool -->
-    <div class="mt-12 p-6 bg-white/90 rounded-2xl border border-amber-300 shadow-md text-center">
+    <!-- Embedded Permanent QR Code Section -->
+    <div class="mt-12 p-6 bg-white/90 rounded-2xl border border-amber-300 shadow-md text-center max-w-sm mx-auto">
       <h3 class="font-bold text-amber-950 mb-1 flex items-center justify-center gap-2">
-        <i class="fas fa-qrcode text-red-700"></i> Generate Scannable Menu QR Code
+        <i class="fas fa-qrcode text-red-700"></i> Scan to Share Menu
       </h3>
-      <p class="text-xs text-amber-900/70 mb-4">Paste your live GitHub URL below to generate a working QR code for your print banners & flyers.</p>
+      <p class="text-xs text-amber-900/70 mb-3">Scan with any phone camera to view our live online menu.</p>
       
-      <div class="flex gap-2 max-w-md mx-auto mb-4">
-        <input type="text" id="qrUrlInput" placeholder="https://yourusername.github.io/spicy-singh/" class="flex-1 px-3 py-2 border border-amber-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-red-600 bg-amber-50/50">
-        <button onclick="generateQR()" class="bg-red-700 text-amber-100 px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition shadow">Generate</button>
+      <div id="qrcode" class="flex justify-center p-3 bg-white border border-amber-200 rounded-xl shadow-inner my-3">
+        <img src="qr-code.png" alt="Spicy Singh Menu QR Code" class="w-40 h-40 object-contain" onerror="this.remove(); renderDynamicQR();">
       </div>
-
-      <div id="qrcode" class="flex justify-center my-4"></div>
-      <p class="text-[11px] text-amber-800/60">Tip: Long press or right-click the QR code image to save and print.</p>
+      <p class="text-[11px] text-amber-800/60">https://spicy-singhs.github.io/spicy-singh/</p>
     </div>
   </div>
 
@@ -123,45 +115,47 @@
   </div>
 
   <script>
+    const LIVE_URL = "https://spicy-singhs.github.io/spicy-singh/";
+
     const menuData = [
       // Snacks & Chaat Special
-      { name: "Bread Pakora", price: 3.00, category: "Snacks & Chaat Special" },
-      { name: "Bread Roll (2 pc)", price: 5.00, category: "Snacks & Chaat Special" },
-      { name: "Vada Pav (2 pc)", price: 6.00, category: "Snacks & Chaat Special" },
-      { name: "Ram Laddu", price: 6.00, category: "Snacks & Chaat Special" },
-      { name: "Mix Pakode", price: 6.00, category: "Snacks & Chaat Special" },
-      { name: "Special Tokri Chaat", price: 9.00, category: "Snacks & Chaat Special" },
-      { name: "Dahi Bhalle", price: 7.00, category: "Snacks & Chaat Special" },
-      { name: "Papdi Chaat", price: 7.00, category: "Snacks & Chaat Special" },
-      { name: "Gol Gappe 7 pc (Sooji/Atta)", price: 6.00, category: "Snacks & Chaat Special" },
-      { name: "Gol Gappe Box (20 pc)", price: 15.00, category: "Snacks & Chaat Special" },
+      { name: "Bread Pakora", price: 3.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Bread Roll (2 pc)", price: 5.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Vada Pav (2 pc)", price: 6.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Ram Laddu", price: 6.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Mix Pakode", price: 6.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Special Tokri Chaat", price: 9.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Dahi Bhalle", price: 7.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Papdi Chaat", price: 7.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Gol Gappe 7 pc (Sooji/Atta)", price: 6.00, category: "Snacks & Chaat Special", image: "" },
+      { name: "Gol Gappe Box (20 pc)", price: 15.00, category: "Snacks & Chaat Special", image: "" },
 
       // Chaap Special
-      { name: "Malai Chaap", price: 12.00, category: "Chaap Special" },
-      { name: "Afghani Chaap", price: 12.00, category: "Chaap Special" },
-      { name: "Masala Chaap", price: 12.00, category: "Chaap Special" },
-      { name: "Pudina Chaap", price: 12.00, category: "Chaap Special" },
-      { name: "Veg. Keema Mutton", price: 13.00, category: "Chaap Special" },
-      { name: "Spl. Tawa Chaap", price: 13.00, category: "Chaap Special" },
+      { name: "Malai Chaap", price: 12.00, category: "Chaap Special", image: "" },
+      { name: "Afghani Chaap", price: 12.00, category: "Chaap Special", image: "" },
+      { name: "Masala Chaap", price: 12.00, category: "Chaap Special", image: "" },
+      { name: "Pudina Chaap", price: 12.00, category: "Chaap Special", image: "" },
+      { name: "Veg. Keema Mutton", price: 13.00, category: "Chaap Special", image: "" },
+      { name: "Spl. Tawa Chaap", price: 13.00, category: "Chaap Special", image: "" },
 
       // Combos
-      { name: "Spl. Aaloo Kachori (3 pc)", price: 10.00, category: "Combos" },
-      { name: "Manchurian with fried rice / noodles", price: 15.00, category: "Combos" },
-      { name: "Chole Bhatoore (3 pc)", price: 10.00, category: "Combos" },
-      { name: "Rajma Chawal", price: 12.00, category: "Combos" },
-      { name: "Chole Chawal", price: 12.00, category: "Combos" },
-      { name: "Kadi Chawal", price: 12.00, category: "Combos" },
+      { name: "Spl. Aaloo Kachori (3 pc)", price: 10.00, category: "Combos", image: "" },
+      { name: "Manchurian with fried rice / noodles", price: 15.00, category: "Combos", image: "" },
+      { name: "Chole Bhatoore (3 pc)", price: 10.00, category: "Combos", image: "" },
+      { name: "Rajma Chawal", price: 12.00, category: "Combos", image: "" },
+      { name: "Chole Chawal", price: 12.00, category: "Combos", image: "" },
+      { name: "Kadi Chawal", price: 12.00, category: "Combos", image: "" },
 
       // Burgers
-      { name: "Aaloo Tikki Burger", price: 7.00, category: "Burgers" },
-      { name: "Spicy Noodle Burger", price: 8.00, category: "Burgers" },
-      { name: "Spicy Paneer Burger", price: 8.00, category: "Burgers" },
-      { name: "Add on- Fries and Pop", price: 3.00, category: "Burgers" },
+      { name: "Aaloo Tikki Burger", price: 7.00, category: "Burgers", image: "" },
+      { name: "Spicy Noodle Burger", price: 8.00, category: "Burgers", image: "" },
+      { name: "Spicy Paneer Burger", price: 8.00, category: "Burgers", image: "" },
+      { name: "Add on- Fries and Pop", price: 3.00, category: "Burgers", image: "" },
 
       // Add-ons
-      { name: "Masala Chai", price: 2.00, category: "Add-ons" },
-      { name: "Jaljeera", price: 1.00, category: "Add-ons" },
-      { name: "Tawa Roti (4)", price: 2.00, category: "Add-ons" }
+      { name: "Masala Chai", price: 2.00, category: "Add-ons", image: "" },
+      { name: "Jaljeera", price: 1.00, category: "Add-ons", image: "" },
+      { name: "Tawa Roti (4)", price: 2.00, category: "Add-ons", image: "" }
     ];
 
     let cart = {};
@@ -183,7 +177,6 @@
         return;
       }
 
-      // Group by Category if "All" is selected
       const categoriesToShow = activeCategory === 'All' 
         ? [...new Set(filtered.map(i => i.category))]
         : [activeCategory];
@@ -195,7 +188,6 @@
         const groupDiv = document.createElement('div');
         groupDiv.className = "mb-6";
 
-        // Section Badge Header matching original menu design
         groupDiv.innerHTML = `
           <div class="inline-block category-badge px-5 py-1.5 rounded-r-full rounded-l-md font-bold text-sm shadow-md mb-3 border-l-4 border-amber-400">
             ${cat}
@@ -203,10 +195,14 @@
           <div class="space-y-2.5">
             ${catItems.map(item => {
               const qty = cart[item.name] || 0;
+              const hasImage = item.image && item.image.trim() !== "";
               return `
                 <div class="menu-card p-3.5 rounded-xl shadow-sm flex justify-between items-center transition hover:shadow-md">
-                  <div>
-                    <h4 class="font-semibold text-gray-900 text-sm">${item.name}</h4>                     <div class="text-xs font-bold text-red-700 mt-0.5">$${item.price.toFixed(2)}</div>
+                  <div class="flex items-center gap-3">
+                    ${hasImage ? `<img src="${item.image}" alt="${item.name}" class="w-14 h-14 rounded-lg object-cover border border-amber-200 shrink-0">` : ''}
+                    <div>
+                      <h4 class="font-semibold text-gray-900 text-sm">${item.name}</h4>                       <div class="text-xs font-bold text-red-700 mt-0.5">$${item.price.toFixed(2)}</div>
+                    </div>
                   </div>
                   <div class="flex items-center gap-2">
                     ${qty > 0 ? `
@@ -273,30 +269,26 @@
         total += itemTotal;
         text += `- ${name} x${qty} ($${itemTotal.toFixed(2)})\n`;
       });
-      text += `\nTotal: $${total.toFixed(2)}`;
-      text += `\n\n(Ordered via Spicy Singh Online Menu)`;
+      text += `\nTotal: $${total.toFixed(2)}\n\n`;
+      text += `Note: Pre-order at least 1-2 hours before as we prepare fresh.\n\n`;
+      text += `(Ordered via Spicy Singh Online Menu)`;
 
-      // Primary WhatsApp number set to (514) 232-7099
       const primaryPhone = "15142327099"; 
       window.open(`https://wa.me/${primaryPhone}?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    function generateQR() {
-      const url = document.getElementById('qrUrlInput').value.trim();
+    function renderDynamicQR() {
       const qrcodeDiv = document.getElementById('qrcode');
       qrcodeDiv.innerHTML = '';
-      if (url) {
-        new QRCode(qrcodeDiv, {
-          text: url,
-          width: 160,
-          height: 160,
-          colorDark : "#831843",
-          colorLight : "#ffffff"
-        });
-      }
+      new QRCode(qrcodeDiv, {
+        text: LIVE_URL,
+        width: 160,
+        height: 160,
+        colorDark : "#831843",
+        colorLight : "#ffffff"
+      });
     }
 
-    // Initial Render
     renderMenu();
   </script>
 </body>

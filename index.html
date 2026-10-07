@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spicy Singh - Indian Street Food</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Rozha+One&display=swap');
+    
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      background-color: #fdf5e6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(220, 38, 38, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(254, 243, 199, 0.8) 0%, rgba(253, 245, 230, 1) 100%);
+      background-attachment: fixed;
+    }
+
+    .menu-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .category-badge {
+      background-color: #3d2314;
+      color: #fef3c7;
+    }
+  </style>
+</head>
+<body class="text-gray-800 min-h-screen pb-28">
+
+  <!-- Corner Mandala Accent Top-Left -->
+  <div class="fixed top-0 left-0 w-32 h-32 opacity-10 pointer-events-none z-0">
+    <svg viewBox="0 0 100 100" fill="#78350f"><path d="M50 0 A50 50 0 0 1 100 50 A50 50 0 0 1 50 100 A50 50 0 0 1 0 50 A50 50 0 0 1 50 0 Z M50 10 A40 40 0 0 0 10 50 A40 40 0 0 0 50 90 A40 40 0 0 0 90 50 A40 40 0 0 0 50 10 Z"/></svg>
+  </div>
+
+  <!-- Header Section -->
+  <header class="bg-gradient-to-r from-red-800 via-amber-700 to-red-800 text-white shadow-xl sticky top-0 z-40 relative">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-16 h-16 rounded-full border-2 border-amber-300 shadow-md overflow-hidden bg-amber-50 flex items-center justify-center shrink-0">
+          <img src="logo.jpg" alt="Spicy Singh Logo" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-amber-800 font-bold text-center text-[10px] leading-tight px-1\'>SPICY<br>SINGH</div>';">
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold tracking-wide text-amber-200" style="font-family: 'Rozha One', serif;">SPICY SINGH</h1>
+          <p class="text-xs text-amber-100 font-medium tracking-wider">INDIAN STREET FOOD</p>
+        </div>
+      </div>
+
+      <!-- Phone Contacts -->
+      <div class="text-right flex flex-col items-end">
+        <a href="tel:5142327099" class="flex items-center gap-1.5 bg-amber-400 text-red-950 font-bold px-3 py-1 rounded-full shadow hover:bg-amber-300 transition text-xs mb-1">
+          <i class="fas fa-phone-alt"></i> (514) 232-7099
+        </a>
+        <a href="tel:4374247099" class="text-amber-200 hover:text-white text-[11px] font-medium transition">
+          Alt: (437) 424-7099
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Pre-order Notice Banner -->
+  <div class="bg-red-900 text-amber-100 text-center py-2 px-4 text-xs font-semibold shadow-inner border-b border-amber-500/20">
+    <i class="fas fa-clock text-amber-300 mr-1.5"></i> Pre-order at least 1-2 hours before as we prepare fresh.
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 mt-6 relative z-10">
+
+    <!-- Search & Filters -->
+    <div class="mb-6 space-y-4">
+      <div class="relative">
+        <input type="text" id="searchInput" oninput="filterMenu()" placeholder="Search samosa, chaap, burgers..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-amber-300 bg-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-600 shadow-sm text-sm">
+        <i class="fas fa-search absolute left-3.5 top-3.5 text-amber-700"></i>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none" id="categoryContainer">
+        <button onclick="setCategory('All')" class="cat-btn bg-red-700 text-amber-100 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm">All</button>
+        <button onclick="setCategory('Snacks & Chaat Special')" class="cat-btn bg-white/80 text-amber-950 border border-amber-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm hover:bg-amber-100">Snacks & Chaat</button>
+        <button onclick="setCategory('Chaap Special')" class="cat-btn bg-white/80 text-amber-950 border border-amber-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm hover:bg-amber-100">Chaap Special</button>
+        <button onclick="setCategory('Combos')" class="cat-btn bg-white/80 text-amber-950 border border-amber-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm hover:bg-amber-100">Combos</button>
+        <button onclick="setCategory('Burgers')" class="cat-btn bg-white/80 text-amber-950 border border-amber-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm hover:bg-amber-100">Burgers</button>
+        <button onclick="setCategory('Add-ons')" class="cat-btn bg-white/80 text-amber-950 border border-amber-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm hover:bg-amber-100">Add-ons</button>
+      </div>
+    </div>
+
+    <!-- Menu Item Cards Container -->
+    <div id="menuList" class="space-y-4"></div>
+
+    <!-- Interactive QR Code Generator Tool -->
+    <div class="mt-12 p-6 bg-white/90 rounded-2xl border border-amber-300 shadow-md text-center">
+      <h3 class="font-bold text-amber-950 mb-1 flex items-center justify-center gap-2">
+        <i class="fas fa-qrcode text-red-700"></i> Generate Scannable Menu QR Code
+      </h3>
+      <p class="text-xs text-amber-900/70 mb-4">Paste your live GitHub URL below to generate a working QR code for your print banners & flyers.</p>
+      
+      <div class="flex gap-2 max-w-md mx-auto mb-4">
+        <input type="text" id="qrUrlInput" placeholder="https://yourusername.github.io/spicy-singh/" class="flex-1 px-3 py-2 border border-amber-300 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-red-600 bg-amber-50/50">
+        <button onclick="generateQR()" class="bg-red-700 text-amber-100 px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-800 transition shadow">Generate</button>
+      </div>
+
+      <div id="qrcode" class="flex justify-center my-4"></div>
+      <p class="text-[11px] text-amber-800/60">Tip: Long press or right-click the QR code image to save and print.</p>
+    </div>
+  </div>
+
+  <!-- Cart Drawer / Sticky Bottom Bar -->
+  <div id="cartBar" class="fixed bottom-0 left-0 right-0 bg-white/95 border-t-2 border-amber-400 p-4 shadow-2xl flex justify-between items-center max-w-3xl mx-auto rounded-t-2xl hidden z-50 backdrop-blur-md">
+    <div>
+      <span id="cartCount" class="bg-red-700 text-amber-100 text-xs font-bold px-2.5 py-1 rounded-full">0 items</span>
+      <div class="text-lg font-bold text-amber-950 mt-1" id="cartTotal">$0.00</div>
+    </div>
+    <button onclick="sendOrder()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-lg flex items-center gap-2 text-sm transition">
+      <i class="fab fa-whatsapp text-lg"></i> Send Order via WhatsApp
+    </button>
+  </div>
+
+  <script>
+    const menuData = [
+      // Snacks & Chaat Special
+      { name: "Bread Pakora", price: 3.00, category: "Snacks & Chaat Special" },
+      { name: "Bread Roll (2 pc)", price: 5.00, category: "Snacks & Chaat Special" },
+      { name: "Vada Pav (2 pc)", price: 6.00, category: "Snacks & Chaat Special" },
+      { name: "Ram Laddu", price: 6.00, category: "Snacks & Chaat Special" },
+      { name: "Mix Pakode", price: 6.00, category: "Snacks & Chaat Special" },
+      { name: "Special Tokri Chaat", price: 9.00, category: "Snacks & Chaat Special" },
+      { name: "Dahi Bhalle", price: 7.00, category: "Snacks & Chaat Special" },
+      { name: "Papdi Chaat", price: 7.00, category: "Snacks & Chaat Special" },
+      { name: "Gol Gappe 7 pc (Sooji/Atta)", price: 6.00, category: "Snacks & Chaat Special" },
+      { name: "Gol Gappe Box (20 pc)", price: 15.00, category: "Snacks & Chaat Special" },
+
+      // Chaap Special
+      { name: "Malai Chaap", price: 12.00, category: "Chaap Special" },
+      { name: "Afghani Chaap", price: 12.00, category: "Chaap Special" },
+      { name: "Masala Chaap", price: 12.00, category: "Chaap Special" },
+      { name: "Pudina Chaap", price: 12.00, category: "Chaap Special" },
+      { name: "Veg. Keema Mutton", price: 13.00, category: "Chaap Special" },
+      { name: "Spl. Tawa Chaap", price: 13.00, category: "Chaap Special" },
+
+      // Combos
+      { name: "Spl. Aaloo Kachori (3 pc)", price: 10.00, category: "Combos" },
+      { name: "Manchurian with fried rice / noodles", price: 15.00, category: "Combos" },
+      { name: "Chole Bhatoore (3 pc)", price: 10.00, category: "Combos" },
+      { name: "Rajma Chawal", price: 12.00, category: "Combos" },
+      { name: "Chole Chawal", price: 12.00, category: "Combos" },
+      { name: "Kadi Chawal", price: 12.00, category: "Combos" },
+
+      // Burgers
+      { name: "Aaloo Tikki Burger", price: 7.00, category: "Burgers" },
+      { name: "Spicy Noodle Burger", price: 8.00, category: "Burgers" },
+      { name: "Spicy Paneer Burger", price: 8.00, category: "Burgers" },
+      { name: "Add on- Fries and Pop", price: 3.00, category: "Burgers" },
+
+      // Add-ons
+      { name: "Masala Chai", price: 2.00, category: "Add-ons" },
+      { name: "Jaljeera", price: 1.00, category: "Add-ons" },
+      { name: "Tawa Roti (4)", price: 2.00, category: "Add-ons" }
+    ];
+
+    let cart = {};
+    let activeCategory = 'All';
+
+    function renderMenu() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const container = document.getElementById('menuList');
+      container.innerHTML = '';
+
+      const filtered = menuData.filter(item => {
+        const matchesCat = activeCategory === 'All' || item.category === activeCategory;
+        const matchesSearch = item.name.toLowerCase().includes(search);
+        return matchesCat && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-amber-900/60 text-sm font-medium">No menu items match your search.</div>`;
+        return;
+      }
+
+      // Group by Category if "All" is selected
+      const categoriesToShow = activeCategory === 'All' 
+        ? [...new Set(filtered.map(i => i.category))]
+        : [activeCategory];
+
+      categoriesToShow.forEach(cat => {
+        const catItems = filtered.filter(i => i.category === cat);
+        if (catItems.length === 0) return;
+
+        const groupDiv = document.createElement('div');
+        groupDiv.className = "mb-6";
+
+        // Section Badge Header matching original menu design
+        groupDiv.innerHTML = `
+          <div class="inline-block category-badge px-5 py-1.5 rounded-r-full rounded-l-md font-bold text-sm shadow-md mb-3 border-l-4 border-amber-400">
+            ${cat}
+          </div>
+          <div class="space-y-2.5">
+            ${catItems.map(item => {
+              const qty = cart[item.name] || 0;
+              return `
+                <div class="menu-card p-3.5 rounded-xl shadow-sm flex justify-between items-center transition hover:shadow-md">
+                  <div>
+                    <h4 class="font-semibold text-gray-900 text-sm">${item.name}</h4>                     <div class="text-xs font-bold text-red-700 mt-0.5">$${item.price.toFixed(2)}</div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    ${qty > 0 ? `
+                      <button onclick="updateQty('${item.name}', -1)" class="w-7 h-7 rounded-lg bg-amber-100 text-amber-900 font-bold flex items-center justify-center hover:bg-amber-200 text-sm">-</button>
+                      <span class="text-xs font-bold px-1 text-gray-800">${qty}</span>
+                    ` : ''}
+                    <button onclick="updateQty('${item.name}', 1)" class="w-7 h-7 rounded-lg bg-red-700 text-amber-100 font-bold flex items-center justify-center hover:bg-red-800 text-sm shadow-sm">+</button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        container.appendChild(groupDiv);
+      });
+    }
+
+    function setCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        if (btn.innerText.includes(cat) || (cat === 'All' && btn.innerText === 'All')) {
+          btn.className = "cat-btn bg-red-700 text-amber-100 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
+        } else {
+          btn.className = "cat-btn bg-white/80 text-amber-950 border border-amber-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm hover:bg-amber-100";
+        }
+      });
+      renderMenu();
+    }
+
+    function filterMenu() {
+      renderMenu();
+    }
+
+    function updateQty(name, delta) {
+      cart[name] = (cart[name] || 0) + delta;
+      if (cart[name] <= 0) delete cart[name];
+      updateCartBar();
+      renderMenu();
+    }
+
+    function updateCartBar() {
+      const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
+      const totalPrice = Object.entries(cart).reduce((sum, [name, qty]) => {
+        const item = menuData.find(i => i.name === name);
+        return sum + (item.price * qty);
+      }, 0);
+
+      const cartBar = document.getElementById('cartBar');
+      if (totalItems > 0) {
+        cartBar.classList.remove('hidden');
+        document.getElementById('cartCount').innerText = `${totalItems} item${totalItems > 1 ? 's' : ''}`;
+        document.getElementById('cartTotal').innerText = `$${totalPrice.toFixed(2)}`;
+      } else {
+        cartBar.classList.add('hidden');
+      }
+    }
+
+    function sendOrder() {
+      let text = "Hello Spicy Singh, I would like to place an order:\n\n";
+      let total = 0;
+      Object.entries(cart).forEach(([name, qty]) => {
+        const item = menuData.find(i => i.name === name);
+        const itemTotal = item.price * qty;
+        total += itemTotal;
+        text += `- ${name} x${qty} ($${itemTotal.toFixed(2)})\n`;
+      });
+      text += `\nTotal: $${total.toFixed(2)}`;
+      text += `\n\n(Ordered via Spicy Singh Online Menu)`;
+
+      // Primary WhatsApp number set to (514) 232-7099
+      const primaryPhone = "15142327099"; 
+      window.open(`https://wa.me/${primaryPhone}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function generateQR() {
+      const url = document.getElementById('qrUrlInput').value.trim();
+      const qrcodeDiv = document.getElementById('qrcode');
+      qrcodeDiv.innerHTML = '';
+      if (url) {
+        new QRCode(qrcodeDiv, {
+          text: url,
+          width: 160,
+          height: 160,
+          colorDark : "#831843",
+          colorLight : "#ffffff"
+        });
+      }
+    }
+
+    // Initial Render
+    renderMenu();
+  </script>
+</body>
+</html>
